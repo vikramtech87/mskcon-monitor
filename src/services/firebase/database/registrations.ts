@@ -7,7 +7,7 @@ import { fetchMeals } from "./meal";
 import { fetchWorkshops } from "./workshop";
 
 export const fetchRegistrations = async (): Promise<
-  Result<Registration, DbError>
+  Result<Registration[], DbError>
 > => {
   const successfulTransactionsResult = await fetchTransactions(true);
 
@@ -15,7 +15,10 @@ export const fetchRegistrations = async (): Promise<
     return successfulTransactionsResult;
   }
 
-  const userIds = successfulTransactionsResult.value.map((t) => t.userId);
+  let userIds: string[] = [];
+  for (const [_, value] of successfulTransactionsResult.value) {
+    userIds.push(value.userId);
+  }
 
   const profilesResult = await fetchProfiles(userIds);
   if (!profilesResult.ok) {
@@ -34,7 +37,26 @@ export const fetchRegistrations = async (): Promise<
 
   const { value: profileData } = profilesResult;
   const { value: mealData } = mealsResult;
-  const { value: WorkshopData } = workshopsResult;
+  const { value: workshopData } = workshopsResult;
 
   let registrations: Registration[] = [];
+
+  for (const userId of userIds) {
+    const profileDatum = profileData.get(userId)!;
+    const mealDatum = mealData.get(userId)!;
+    const workshopDatum = workshopData.get(userId)!;
+
+    const registration: Registration = {
+      userId,
+      meal: mealDatum,
+      profile: profileDatum,
+      workshop: workshopDatum,
+    };
+    registrations.push(registration);
+  }
+
+  return {
+    ok: true,
+    value: registrations,
+  };
 };

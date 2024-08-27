@@ -7,10 +7,10 @@ import { fetchDocs } from "./dbUtils";
 
 export const fetchMeals = async (
   userIds: string[]
-): Promise<Result<MealData[], DbError>> => {
+): Promise<Result<Map<string, MealData>, DbError>> => {
   const collectionRef = collection(db, "meal");
   const q = query(collectionRef, where(documentId(), "in", userIds));
 
-  const docs = await fetchDocs<Omit<MealData, "id">>(q);
+  const docs = await fetchDocs<MealData>(q);
   return docs;
 };

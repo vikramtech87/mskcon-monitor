@@ -7,10 +7,10 @@ import { fetchDocs } from "./dbUtils";
 
 export const fetchWorkshops = async (
   userIds: string[]
-): Promise<Result<WorkshopData[], DbError>> => {
+): Promise<Result<Map<string, WorkshopData>, DbError>> => {
   const collectionRef = collection(db, "workshop");
   const q = query(collectionRef, where(documentId(), "in", userIds));
 
-  const docs = await fetchDocs<Omit<WorkshopData, "id">>(q);
+  const docs = await fetchDocs<WorkshopData>(q);
   return docs;
 };

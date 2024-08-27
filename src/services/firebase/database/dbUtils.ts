@@ -5,13 +5,13 @@ import { DocumentData, getDocs, Query } from "firebase/firestore";
 
 export const fetchDocs = async <T>(
   q: Query<DocumentData, DocumentData>
-): Promise<Result<(T & { id: string })[], DbError>> => {
+): Promise<Result<Map<string, T>, DbError>> => {
   try {
     const querySnapshot = await getDocs(q);
-    let docs: (T & { id: string })[] = [];
+    let docs = new Map<string, T>();
     querySnapshot.forEach((doc) => {
       const data = doc.data() as T;
-      docs.push({ ...data, id: doc.id });
+      docs.set(doc.id, data);
     });
     return {
       ok: true,

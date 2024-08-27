@@ -13,7 +13,7 @@ import { fetchDocs } from "./dbUtils";
 
 export const fetchTransactions = async (
   onlySuccess: boolean
-): Promise<Result<TransactionData[], DbError>> => {
+): Promise<Result<Map<string, TransactionData>, DbError>> => {
   const ref = collection(db, "transactions");
 
   let q: Query<DocumentData, DocumentData>;
@@ -23,6 +23,6 @@ export const fetchTransactions = async (
     q = query(ref);
   }
 
-  const docs = await fetchDocs<Omit<TransactionData, "id">>(q);
+  const docs = await fetchDocs<TransactionData>(q);
   return docs;
 };

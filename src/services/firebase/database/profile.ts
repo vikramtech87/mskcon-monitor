@@ -7,10 +7,10 @@ import { DbError } from "@/lib/errors/db-error";
 
 export const fetchProfiles = async (
   userIds: string[]
-): Promise<Result<ProfileData[], DbError>> => {
+): Promise<Result<Map<string, ProfileData>, DbError>> => {
   const collectionRef = collection(db, "profile");
   const q = query(collectionRef, where(documentId(), "in", userIds));
 
-  const docs = await fetchDocs<Omit<ProfileData, "id">>(q);
+  const docs = await fetchDocs<ProfileData>(q);
   return docs;
 };
