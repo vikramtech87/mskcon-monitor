@@ -14,11 +14,6 @@ const resources: Resource[] = [
     allowedRoles: ["registration"],
   },
   {
-    label: "Workshop",
-    url: "/workshop",
-    allowedRoles: ["workshop"],
-  },
-  {
     label: "Finance",
     url: "/finance",
     allowedRoles: ["finance"],

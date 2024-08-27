@@ -1,9 +1,9 @@
+import { Timestamp } from "firebase/firestore";
 import { MealPreference } from "./meal-preference";
 
-export type MealDataWithoutId = {
-  preference: MealPreference;
-};
-
 export type MealData = {
-  userId: string;
-} & MealDataWithoutId;
+  createdAt: Timestamp;
+  preference: MealPreference;
+  updatedAt: Timestamp;
+  id: string;
+};

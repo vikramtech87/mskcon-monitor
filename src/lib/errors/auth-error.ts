@@ -11,5 +11,6 @@ export class LoginError extends AuthError {
   constructor(code: LoginErrorCode) {
     super(code);
     this.code = code;
+    this.name = "LoginError";
   }
 }
